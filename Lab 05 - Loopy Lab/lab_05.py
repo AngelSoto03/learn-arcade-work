@@ -63,9 +63,9 @@ def draw_section_4():
 def draw_section_5():
     # Do NOT use 'if' statements to complete 5-8. Manipulate the loops instead.
     for row in range(30):
-        for column in range(30):
-            x = (column * 10) + 6
-            y = (row * 10) + 306
+        for column in range(row):
+            x = 6 + ((29 - column) * 10)
+            y = 596 - (row * 10)
             arcade.draw_rectangle_filled(x, y, 5, 5, arcade.color.WHITE)
 
 
