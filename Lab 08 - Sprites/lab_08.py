@@ -28,16 +28,16 @@ class Bone(arcade.Sprite):
 
         # If we are out-of-bounds, then 'bounce'
 
-        if self.left < 0:
+        if self.left < 0 and self.change_x < 0:
             self.change_x *= -1
 
-        if self.right > SCREEN_WIDTH:
+        if self.right > SCREEN_WIDTH and self.change_x > 0:
             self.change_x *= -1
 
-        if self.bottom < 0:
+        if self.bottom < 0 and self.change_y < 0:
             self.change_y *= -1
 
-        if self.top > SCREEN_HEIGHT:
+        if self.top > SCREEN_HEIGHT and self.change_y > 0:
             self.change_y *= -1
 
 
@@ -138,22 +138,27 @@ class MyGame(arcade.Window):
 
         # Put the text on the screen.
         output = f"Score: {self.score}"
-        arcade.draw_text(output, 10, 20, arcade.color.WHITE, 14)
+        arcade.draw_text(output, 10, 20, arcade.color.WHITE, 20)
+
+        if len(self.bone_list) == 0:
+            output = "GAME OVER"
+            arcade.draw_text(output, SCREEN_WIDTH / 3, SCREEN_HEIGHT / 2, arcade.color.WHITE, 50)
 
     def on_mouse_motion(self, x, y, dx, dy):
         """ Handle Mouse Motion """
-
-        # Move the center of the player sprite to match the mouse x, y
-        self.player_sprite.center_x = x
-        self.player_sprite.center_y = y
+        if len(self.bone_list) != 0:
+            # Move the center of the player sprite to match the mouse x, y
+            self.player_sprite.center_x = x
+            self.player_sprite.center_y = y
 
     def update(self, delta_time):
         """ Movement and game logic """
         # Call update on all sprites (The sprites don't do much in this
         # example though.)
-        self.player_list.update()
-        self.bone_list.update()
-        self.bug_list.update()
+        if len(self.bone_list) != 0:
+            self.player_list.update()
+            self.bone_list.update()
+            self.bug_list.update()
 
         # Generate a list of all sprites that collided with the player.
         hit_list = arcade.check_for_collision_with_list(self.player_sprite,
@@ -173,8 +178,6 @@ class MyGame(arcade.Window):
             arcade.play_sound(self.bad_sound)
             self.score -= 1
 
-        if self.score == 0:
-            
 
 def main():
     """ Main method """
