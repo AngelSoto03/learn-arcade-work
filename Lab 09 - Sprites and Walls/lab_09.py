@@ -1,14 +1,3 @@
-"""
-Use sprites to scroll around a large screen.
-
-Simple program to show basic sprite usage.
-
-Artwork from http://kenney.nl
-
-If Python and Arcade are installed, this example can be run from the command line with:
-python -m arcade.examples.sprite_move_scrolling
-"""
-
 import random
 import arcade
 import os
@@ -163,8 +152,6 @@ class MyGame(arcade.Window):
         """
         Render the screen.
         """
-
-        # This command has to happen before we start drawing
         arcade.start_render()
 
         # Draw all the sprites.
