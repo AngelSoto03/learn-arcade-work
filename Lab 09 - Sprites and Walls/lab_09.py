@@ -161,7 +161,7 @@ class MyGame(arcade.Window):
         self.eraser_list.draw()
 
         output = f"Score: {self.score}"
-        arcade.draw_text(output, 10, 45, arcade.color.WHITE, 25)
+        arcade.draw_text(output, 10 + self.view_left, 45 + self.view_bottom, arcade.color.BLACK, 25)
 
     def on_key_press(self, key, modifiers):
         """Called whenever a key is pressed. """
