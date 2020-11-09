@@ -1,0 +1,109 @@
+1. Write code to swap the values 25 and 40.
+
+my_list = [55, 41, 52, 68, 45, 27, 40, 25, 37, 26]
+
+temp = my_list[6]
+my_list[6] = my_list[7]
+my_list[7] = temp
+
+2. Write code to swap the values 2 and 27.
+
+my_list = [27, 32, 18,  2, 11, 57, 14, 38, 19, 91]
+
+temp = my_list[0]
+my_list[0] = my_list[3]
+my_list [3] = 0
+
+3. Why does the following code not work? Explain it, don't just list working code.
+
+my_list = [70, 32, 98, 88, 92, 36, 81, 83, 87, 66]
+temp = my_list[0]
+my_list[1] = my_list[0]
+my_list[0] = temp
+
+The item being stored on the variable "temp" is being repeatedly set on the list in the last command, which
+means that there will be two items in the list as 70.
+
+4. Show how the following numbers can be sorted using the selection sort.
+Show the numbers after each iteration of the outer loop, similar to what is shown in the book.
+I am NOT looking for a copy of the code to do the sort. If you include any code for problems 4-7 you are doing it wrong.
+
+97   74    8   98   47   62   12   11    0   60
+
+0   74    8   98   47   62   12   11    97   60
+0   8    74   98   47   62   12   11    97   60
+0   8    11   98   47   62   12   74    97   60
+0   8    11   12   47   62   98   74    97   60
+0   8    11   12   47   62   98   74    97   60
+0   8    11   12   47   60   98   74    97   62
+0   8    11   12   47   60   62   74    97   98
+0   8    11   12   47   60   62   74    97   98
+0   8    11   12   47   60   62   74    97   98
+
+5. Show how the following numbers can be sorted using the selection sort:
+
+74   92   18   47   40   58    0   36   29   25
+
+0   92   18   47   40   58    74   36   29   25
+0   18   92   47   40   58    74   36   29   25
+0   18   25   47   40   58    74   36   29   92
+0   18   25   29   40   58    74   36   47   92
+0   18   25   29   36   58    74   40   47   92
+0   18   25   29   36   40    74   58   47   92
+0   18   25   29   36   40    47   58   74   92
+0   18   25   29   36   40    47   58   74   92
+0   18   25   29   36   40    47   58   74   92
+0   18   25   29   36   40    47   58   74   92
+
+6. Show how the following numbers can be sorted using the INSERTION sort.
+(Note: If you think the 0 gets immediately sorted into position, you are doing it wrong.
+Go back and re-read how this sort works.)
+
+74   92   18   47   40   58    0   36   29   25
+
+74   92   18   47   40   58    0   36   29   25
+18   74   92   47   40   58    0   36   29   25
+18   47   74   92   40   58    0   36   29   25
+18   40   47   74   92   58    0   36   29   25
+18   40   47   58   74   92    0   36   29   25
+ 0   18   40   47   58   74   92   36   29   25
+ 0   18   36   40   47   58   74   92   29   25
+ 0   18   29   36   40   47   58   74   92   25
+ 0   18   25   29   36   40   47   58   74   92
+
+
+7. Show how the following numbers can be sorted using the insertion sort:
+
+    37   11   14   50   24    7   17   88   99    9
+
+    11   37   14   50   24    7   17   88   99    9
+    11   14   37   50   24    7   17   88   99    9
+    11   14   37   50   24    7   17   88   99    9
+    11   14   24   37   50    7   17   88   99    9
+    7    11   14   24   37   50   17   88   99    9
+    7    11   14   17   24   37   50   88   99    9
+    7    11   14   17   24   37   50   88   99    9
+    7    11   14   17   24   37   50   88   99    9
+    7     9   11   14   17   24   37   50   88   99
+
+8. Explain what `min_pos` does in the selection sort.
+
+It selects the smallest value item in scan_pos.
+
+9. Explain what `cur_pos` does in the selection sort.
+
+It explains what is the current position you are on when scanning for a smaller value.
+
+10. Explain what `scan_pos` does in the selection sort.
+
+It travels around the list to look for a smaller value and it always starts scanning from a position after the cur_pos.
+
+11. Explain what `key_pos` and `key_value` are in the insertion sort.
+
+key_pos divides the list into the sorted items and the unsorted items in a list.
+key_value is the last item being checked to see if it is smaller than any of the other numbers or items before it.
+
+12. Explain `scan_pos` in the insertion sort.
+
+scan_pos is the last position being checked at a time when inserting the
+next smallest number to the beginning of the list.

@@ -2,10 +2,13 @@ import arcade
 
 PLAYER_SCALE = 0.2
 ZOMBIE_SCALE = 0.3
-MOVEMENT_SPEED = 0.5
+FLOOR_SCALING = 0.8
+MOVEMENT_SPEED = 10
 
 SCREEN_WIDTH = 800
 SCREEN_HEIGHT = 600
+
+VIEWPORT_MARGIN = 200
 
 SCREEN_TITLE = "Zombie Slash"
 
@@ -63,26 +66,28 @@ class MyGame(arcade.Window):
         # Sprite from: irmirx @ Open Game Art
         self.zombie_sprite = arcade.Sprite("zombie.png", ZOMBIE_SCALE)
         self.zombie_sprite.center_x = (SCREEN_WIDTH / 5) + 200
-        self.zombie_sprite.center_y = SCREEN_HEIGHT / 4
+        self.zombie_sprite.center_y = SCREEN_HEIGHT / 4 + 200
         self.zombies_list.append(self.zombie_sprite)
 
         # Walls
-        for x in range(0, 1000, 100):
-            for y in range(100, 180, 100):
+        for x in range(-100, 0, 99):
+            for y in range(-100, 600, 102):
                 wall = arcade.Sprite("wall128x128.png", SPRITE_SCALING)
                 wall.center_x = x
                 wall.center_y = y
                 self.wall_list.append(wall)
-                self.physics_engine = arcade.PhysicsEngineSimple(self.player_sprite, self.wall_list)
+                """self.physics_engine = arcade.PhysicsEngineSimple(self.player_sprite, self.wall_list)"""
 
         # Floor
-        """for x in range(100, 800, 100):
-            for y in range(100, 1000, 20):
-                floor = arcade.Sprite("flagstone1.jpg", SPRITE_SCALING)
-                floor.center_x = x
-                floor.center_y = y
-                self.floor_list.append(wall)
-                self.physics_engine = arcade.PhysicsEngineSimple(self.player_sprite, self.wall_list)"""
+        for x in range(-100, 1000, 99):
+            for y in range(-100, 0, 102):
+                wall = arcade.Sprite("wall128x128.png", SPRITE_SCALING)
+                wall.center_x = x
+                wall.center_y = y
+                self.wall_list.append(wall)
+                """self.physics_engine = arcade.PhysicsEngineSimple(self.player_sprite, self.wall_list)"""
+
+
 
     def on_draw(self):
         """
@@ -118,6 +123,59 @@ class MyGame(arcade.Window):
             self.player_sprite.change_y = 0
         elif key == arcade.key.LEFT or key == arcade.key.RIGHT:
             self.player_sprite.change_x = 0
+
+    def on_update(self, delta_time):
+        """ Movement and game logic """
+        """self.physics_engine.update()"""
+        # Call update on all sprites (The sprites don't do much in this
+        # example though.)
+
+        self.player_list.update()
+        self.zombies_list.update()
+
+        # --- Manage Scrolling ---
+
+        # Keep track of if we changed the boundary. We don't want to call the
+        # set_viewport command if we didn't change the view port.
+        changed = False
+
+        # Scroll left
+        left_boundary = self.view_left + VIEWPORT_MARGIN
+        if self.player_sprite.left < left_boundary:
+            self.view_left -= left_boundary - self.player_sprite.left
+            changed = True
+
+        # Scroll right
+        right_boundary = self.view_left + SCREEN_WIDTH - VIEWPORT_MARGIN
+        if self.player_sprite.right > right_boundary:
+            self.view_left += self.player_sprite.right - right_boundary
+            changed = True
+
+        # Scroll up
+        top_boundary = self.view_bottom + SCREEN_HEIGHT - VIEWPORT_MARGIN
+        if self.player_sprite.top > top_boundary:
+            self.view_bottom += self.player_sprite.top - top_boundary
+            changed = True
+
+        # Scroll down
+        bottom_boundary = self.view_bottom + VIEWPORT_MARGIN
+        if self.player_sprite.bottom < bottom_boundary:
+            self.view_bottom -= bottom_boundary - self.player_sprite.bottom
+            changed = True
+
+        # Make sure our boundaries are integer values. While the view port does
+        # support floating point numbers, for this application we want every pixel
+        # in the view port to map directly onto a pixel on the screen. We don't want
+        # any rounding errors.
+        self.view_left = int(self.view_left)
+        self.view_bottom = int(self.view_bottom)
+
+        # If we changed the boundary values, update the view port to match
+        if changed:
+            arcade.set_viewport(self.view_left,
+                                SCREEN_WIDTH + self.view_left,
+                                self.view_bottom,
+                                SCREEN_HEIGHT + self.view_bottom)
 
 def main():
     """ Main method """
