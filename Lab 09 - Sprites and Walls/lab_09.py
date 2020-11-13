@@ -51,6 +51,10 @@ class MyGame(arcade.Window):
         self.view_bottom = 0
         self.view_left = 0
 
+    def draw_platforms(self, x, y):
+
+        arcade.draw_lrtb_rectangle_filled(x, y)
+
     def setup(self):
         """ Set up the game and initialize the variables. """
 
