@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<tileset version="1.4" tiledversion="1.4.2" name="my_tiles" tilewidth="128" tileheight="128" tilecount="42" columns="0">
+<tileset version="1.4" tiledversion="1.4.2" name="my_tiles" tilewidth="128" tileheight="128" tilecount="48" columns="0">
  <grid orientation="orthogonal" width="1" height="1"/>
  <tile id="0">
   <image width="128" height="128" source="wall128x128.png"/>
@@ -126,5 +126,23 @@
  </tile>
  <tile id="70">
   <image width="100" height="100" source="White/2x/arrowUp.png"/>
+ </tile>
+ <tile id="71">
+  <image width="128" height="128" source="tiles/PNG/Tiles/signRight.png"/>
+ </tile>
+ <tile id="72">
+  <image width="128" height="128" source="tiles/PNG/Tiles/water.png"/>
+ </tile>
+ <tile id="73">
+  <image width="128" height="128" source="tiles/PNG/Tiles/waterTop_high.png"/>
+ </tile>
+ <tile id="74">
+  <image width="128" height="128" source="tiles/PNG/Tiles/waterTop_low.png"/>
+ </tile>
+ <tile id="75">
+  <image width="128" height="128" source="tiles/PNG/Tiles/bridgeB.png"/>
+ </tile>
+ <tile id="76">
+  <image width="128" height="128" source="tiles/PNG/Items/coinGold.png"/>
  </tile>
 </tileset>

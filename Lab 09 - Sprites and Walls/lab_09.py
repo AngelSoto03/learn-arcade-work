@@ -83,11 +83,11 @@ class MyGame(arcade.Window):
         # TOP AND BOTTOM
         for x in range(-732, 801, 68):
             for y in range(0, 2069, 2040):
-                    wall = arcade.Sprite("wallblock.png", SPRITE_SCALING)
-                    wall.center_x = x
-                    wall.center_y = y
-                    self.wall_list.append(wall)
-                    self.physics_engine = arcade.PhysicsEngineSimple(self.player_sprite, self.wall_list)
+                wall = arcade.Sprite("wallblock.png", SPRITE_SCALING)
+                wall.center_x = x
+                wall.center_y = y
+                self.wall_list.append(wall)
+                self.physics_engine = arcade.PhysicsEngineSimple(self.player_sprite, self.wall_list)
 
         # Blocks and walls
         for x in range(-732, 801, 68):
