@@ -1,24 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.4" tiledversion="1.4.2" orientation="orthogonal" renderorder="right-down" width="81" height="20" tilewidth="128" tileheight="128" infinite="0" nextlayerid="8" nextobjectid="1">
+<map version="1.4" tiledversion="1.4.2" orientation="orthogonal" renderorder="right-down" width="93" height="20" tilewidth="128" tileheight="128" infinite="0" nextlayerid="8" nextobjectid="1">
  <tileset firstgid="1" source="my_tiles.tsx"/>
- <layer id="1" name="platforms" width="81" height="20" offsetx="0" offsety="-0.180106">
+ <layer id="1" name="platforms" width="93" height="20" offsetx="0" offsety="-0.180106">
   <data encoding="base64" compression="zlib">
-   eJztmd0KwjAMhbM3Eb0Qf0CQeeHVEL30oXx0U3BQQts1Zintlg8Og7XryOkpXVkHAJ2ylo52jeZh/ePXgHkop5SHPerx0035naWxHMoxD+Xk1rhFXVA7hfGn1nmfaKsBy6GcWI2p3HG+qTU9pPl9E/nQtjn3OG6N3HPJmnOY6s95pkUPuRkdazygjqhTRv9SHvq1+Kptb7Ec5kPndJzLUI2pTE55SPeiJXkY458czt2/9XNgDR62zivRdgb4uHXpaw2ecHlG7jv/9njdEEk9HCC817aM9n8AJ9+rO+oaUMt8AeSdFOo=
+   eJztmcsOgjAQRYc/MbowPhITgwtXhuhG40f56U4TScrQlhaYAeqc5MYFTaWHi4VYAEDBHKUJtxN13kady6PO5ZFyXmKqXy7M3zl3tOfyqHN5Yp2sMSfMhmH+rt+dMnBsiWjP5fE5CfU65R2I0zm9P94kNvTYlHt6qpPU907teZu+zrnmnwPc90DtZIfZYw4R46Wc22u3s/S9VHseD+1A32vvchLqfJdzuvfm5Hws+vS8JuaZfYzn89wY4pxjfG7coL0fPQLjjwAf02M7/+4wBeP7ijmT3D3jje8tfq5Ihjp3Xfdq4JxT8yKp1+TybcL9v1wBTbe+81gyTxLX+ux8AQwGHXI=
   </data>
  </layer>
- <layer id="7" name="coins" width="81" height="20">
+ <layer id="7" name="coins" width="93" height="20">
   <data encoding="base64" compression="zlib">
-   eJzt10EOABAMRNFe0P2vY9+VasrQ/xJ7HSPCDK8YbiGODPPIEF0p9r5yLxWzKmb4Ep/brRx/Pz86CnW7HVXoNfcrTz2/yFuvPgt6opc4bbVz/KUAHRMGiQxW
+   eJzt18EJACAMQ9Eu6P7reC8IIqS08T/wXkMDGgFXKx3okXk9Mgc0HHqlnF2RjUPmk+Scp+Q+Zc5XdAC/q+pAh57R93rd81a+hbrfHVBg7+Hmdqf5WwM42c8NDFY=
   </data>
  </layer>
- <layer id="5" name="background" width="81" height="20" offsetx="0.77163" offsety="0.267079">
+ <layer id="5" name="background" width="93" height="20" offsetx="0.77163" offsety="0.267079">
   <data encoding="base64" compression="zlib">
-   eJzt1DEKgDAMBdDczVp7/xN16eDQRVBi4L0lkCH85ScCAAC+MbIDAL/mR0ANusrdlR2guHPN/vLdttnp7jNHdgBKmCUxAno=
+   eJzt1DEOgCAQBED+Jgr/fxEWljYQ5BKcaS65YrPVpgQAAOyoRhcA6GCzgBG2g5VKdIGfOZ97Tc7NLz9b8q0jugDcGoDfAno=
   </data>
  </layer>
- <layer id="6" name="damage" width="81" height="20">
+ <layer id="6" name="damage" width="93" height="20">
   <data encoding="base64" compression="zlib">
-   eJztw0EJAAAIBDDraf9ARvDrwQarAgAAAAAALhP8iw6+a50a/g==
+   eJztw0EJAAAIBDDraf9AZvAlBxusCgAAAAAAAP5M8FQd/GoBC2Ua/g==
   </data>
  </layer>
 </map>

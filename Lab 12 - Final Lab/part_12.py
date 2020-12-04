@@ -47,6 +47,57 @@ def load_texture_pair(filename):
     ]
 
 
+class InstructionView(arcade.View):
+
+    def on_draw(self):
+        """ Draw this view """
+        arcade.start_render()
+        arcade.draw_text("WELCOME TO ZOMBIE SLASHER", SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2,
+                         arcade.color.WHITE, font_size=60, anchor_x="center")
+        arcade.draw_text("Click to advance", SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2-75,
+                         arcade.color.WHITE, font_size=30, anchor_x="center")
+
+    def on_show(self):
+        """ This is run once when we switch to this view """
+        arcade.set_background_color(arcade.csscolor.DARK_BLUE)
+
+        # Reset the viewport, necessary if we have a scrolling game and we need
+        # to reset the viewport back to the start so we can see what we draw.
+        arcade.set_viewport(0, SCREEN_WIDTH - 1, 0, SCREEN_HEIGHT - 1)
+
+    def on_mouse_press(self, _x, _y, _button, _modifiers):
+        """ If the user presses the mouse button, start the game. """
+        game_view = SecInstructionView()
+        self.window.show_view(game_view)
+
+
+class SecInstructionView(arcade.View):
+
+    def on_draw(self):
+        """ Draw this view """
+        arcade.start_render()
+        center_x = 400
+        center_y = 500
+        arcade.draw_text("Kill as much zombies as you can!", center_x, center_y,
+                         arcade.color.WHITE, font_size=40, anchor_x="center")
+        arcade.draw_text("Controls:", SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2-75,
+                         arcade.color.WHITE, font_size=40, anchor_x="center")
+
+    def on_show(self):
+        """ This is run once when we switch to this view """
+        arcade.set_background_color(arcade.csscolor.DARK_BLUE)
+
+        # Reset the viewport, necessary if we have a scrolling game and we need
+        # to reset the viewport back to the start so we can see what we draw.
+        arcade.set_viewport(0, SCREEN_WIDTH - 1, 0, SCREEN_HEIGHT - 1)
+
+    def on_mouse_press(self, _x, _y, _button, _modifiers):
+        """ If the user presses the mouse button, start the game. """
+        game_view = MyGame()
+        game_view.setup()
+        self.window.show_view(game_view)
+
+
 class PlayerCharacter(arcade.Sprite):
     """ Player Sprite"""
     def __init__(self):
@@ -156,10 +207,10 @@ class ZombieCharacter(arcade.Sprite):
     def update_animation(self, delta_time: float = 1/60):
 
         # Figure out if we need to flip face left or right
-        if self.change_x < 0 and self.character_face_direction == RIGHT_FACING:
-            self.character_face_direction = LEFT_FACING
-        elif self.change_x > 0 and self.character_face_direction == LEFT_FACING:
+        if self.change_x < 0 and self.character_face_direction == LEFT_FACING:
             self.character_face_direction = RIGHT_FACING
+        elif self.change_x > 0 and self.character_face_direction == RIGHT_FACING:
+            self.character_face_direction = LEFT_FACING
 
         # Idle animation
         if self.change_x == 0:
@@ -176,7 +227,7 @@ class ZombieCharacter(arcade.Sprite):
         self.texture = self.walk_textures[self.cur_texture][self.character_face_direction]
 
 
-class MyGame(arcade.Window):
+class MyGame(arcade.View):
     """
     Main application class.
     """
@@ -184,7 +235,7 @@ class MyGame(arcade.Window):
     def __init__(self):
 
         # Call the parent class and set up the window
-        super().__init__(SCREEN_WIDTH, SCREEN_HEIGHT, SCREEN_TITLE)
+        super().__init__()
 
         # These are 'lists' that keep track of our sprites. Each sprite should
         # go into a list.
@@ -252,6 +303,16 @@ class MyGame(arcade.Window):
         self.player_sprite.center_y = PLAYER_START_Y
         self.player_list.append(self.player_sprite)
 
+        texture_list = []
+        for texture_pair in self.player_sprite.walk_textures:
+            texture_list.append(texture_pair[0])
+            texture_list.append(texture_pair[1])
+
+        for texture_pair in self.player_sprite.idle_textures:
+            texture_list.append(texture_pair[0])
+            texture_list.append(texture_pair[1])
+        self.player_list.preload_textures(texture_list)
+
         # Create zombies
         self.zombie_sprite = ZombieCharacter()
         self.zombie_sprite.center_x = PLAYER_START_X + 1000
@@ -268,6 +329,16 @@ class MyGame(arcade.Window):
         self.zombie_sprite.boundary_right = self.zombie_sprite.center_x + 200
         self.zombie_sprite.boundary_left = self.zombie_sprite.center_x - 200
         self.zombie_list.append(self.zombie_sprite)
+
+        texture_list = []
+        for texture_pair in self.zombie_sprite.walk_textures:
+            texture_list.append(texture_pair[0])
+            texture_list.append(texture_pair[1])
+
+        for texture_pair in self.zombie_sprite.idle_textures:
+            texture_list.append(texture_pair[0])
+            texture_list.append(texture_pair[1])
+        self.zombie_list.preload_textures(texture_list)
 
         # Read the map
         my_map = arcade.tilemap.read_tmx("map.tmx")
@@ -356,6 +427,7 @@ class MyGame(arcade.Window):
             self.player_sprite.change_x = 0
 
     def update(self, delta_time):
+
         """ Movement and game logic """
         if not self.game_over:
             # Move the player with the physics engine
@@ -449,8 +521,10 @@ class MyGame(arcade.Window):
 
 def main():
     """ Main method """
-    window = MyGame()
-    window.setup()
+
+    window = arcade.Window(SCREEN_WIDTH, SCREEN_HEIGHT, SCREEN_TITLE)
+    start_view = InstructionView()
+    window.show_view(start_view)
     arcade.run()
 
 
