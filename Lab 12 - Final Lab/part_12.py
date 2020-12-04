@@ -30,7 +30,7 @@ LEFT_FACING = 1
 # and the edge of the screen.
 LEFT_VIEWPORT_MARGIN = 200
 RIGHT_VIEWPORT_MARGIN = 200
-BOTTOM_VIEWPORT_MARGIN = 150
+BOTTOM_VIEWPORT_MARGIN = 200
 TOP_VIEWPORT_MARGIN = 100
 
 PLAYER_START_X = 64
@@ -49,17 +49,23 @@ def load_texture_pair(filename):
 
 class InstructionView(arcade.View):
 
+    def __init__(self):
+        """ This is run once when we switch to this view """
+        super().__init__()
+        self.texture = arcade.load_texture("title_screen.png")
+
+        # Reset the viewport, necessary if we have a scrolling game and we need
+        # to reset the viewport back to the start so we can see what we draw.
+        arcade.set_viewport(0, SCREEN_WIDTH - 1, 0, SCREEN_HEIGHT - 1)
+
     def on_draw(self):
         """ Draw this view """
         arcade.start_render()
-        arcade.draw_text("WELCOME TO ZOMBIE SLASHER", SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2,
-                         arcade.color.WHITE, font_size=60, anchor_x="center")
-        arcade.draw_text("Click to advance", SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2-75,
-                         arcade.color.WHITE, font_size=30, anchor_x="center")
+        self.texture.draw_sized(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2,
+                                SCREEN_WIDTH, SCREEN_HEIGHT)
 
     def on_show(self):
         """ This is run once when we switch to this view """
-        arcade.set_background_color(arcade.csscolor.DARK_BLUE)
 
         # Reset the viewport, necessary if we have a scrolling game and we need
         # to reset the viewport back to the start so we can see what we draw.
@@ -73,15 +79,25 @@ class InstructionView(arcade.View):
 
 class SecInstructionView(arcade.View):
 
+    def __init__(self):
+        """ This is run once when we switch to this view """
+        super().__init__()
+
+        self.texture = arcade.load_texture("intructions_screen.png")
+
+        # Reset the viewport, necessary if we have a scrolling game and we need
+        # to reset the viewport back to the start so we can see what we draw.
+        arcade.set_viewport(0, SCREEN_WIDTH - 1, 0, SCREEN_HEIGHT - 1)
+
+        # Reset the viewport, necessary if we have a scrolling game and we need
+        # to reset the viewport back to the start so we can see what we draw.
+        arcade.set_viewport(0, SCREEN_WIDTH - 1, 0, SCREEN_HEIGHT - 1)
+
     def on_draw(self):
         """ Draw this view """
         arcade.start_render()
-        center_x = 400
-        center_y = 500
-        arcade.draw_text("Kill as much zombies as you can!", center_x, center_y,
-                         arcade.color.WHITE, font_size=40, anchor_x="center")
-        arcade.draw_text("Controls:", SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2-75,
-                         arcade.color.WHITE, font_size=40, anchor_x="center")
+        self.texture.draw_sized(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2,
+                                SCREEN_WIDTH, SCREEN_HEIGHT)
 
     def on_show(self):
         """ This is run once when we switch to this view """
@@ -94,7 +110,32 @@ class SecInstructionView(arcade.View):
     def on_mouse_press(self, _x, _y, _button, _modifiers):
         """ If the user presses the mouse button, start the game. """
         game_view = MyGame()
-        game_view.setup()
+        game_view.setup(level=1)
+        self.window.show_view(game_view)
+
+
+class GameOverView(arcade.View):
+    """ View to show when game is over """
+
+    def __init__(self):
+        """ This is run once when we switch to this view """
+        super().__init__()
+        self.texture = arcade.load_texture("game_over.png")
+
+        # Reset the viewport, necessary if we have a scrolling game and we need
+        # to reset the viewport back to the start so we can see what we draw.
+        arcade.set_viewport(0, SCREEN_WIDTH - 1, 0, SCREEN_HEIGHT - 1)
+
+    def on_draw(self):
+        """ Draw this view """
+        arcade.start_render()
+        self.texture.draw_sized(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2,
+                                SCREEN_WIDTH, SCREEN_HEIGHT)
+
+    def on_mouse_press(self, _x, _y, _button, _modifiers):
+        """ If the user presses the mouse button, re-start the game. """
+        game_view = MyGame()
+        game_view.setup(level=1)
         self.window.show_view(game_view)
 
 
@@ -129,6 +170,10 @@ class PlayerCharacter(arcade.Sprite):
         for i in range(10):
             texture = load_texture_pair(f"02-Run/JK_P_Gun__Run_{i:03}.png")
             self.walk_textures.append(texture)
+
+        self.jump_textures = []
+        texture = load_texture_pair(f"05-Jump/JK_P_Gun__Jump_000.png")
+        self.walk_textures.append(texture)
 
         # Set the initial texture
         self.texture = self.idle_textures[0][0]
@@ -246,6 +291,8 @@ class MyGame(arcade.View):
         self.zombie_list = None
         self.bullet_list = None
         self.coin_list = None
+        self.next_level_list = None
+        self.final_list = None
 
         # Load sounds
         # Sounds from Salami Sound
@@ -272,11 +319,13 @@ class MyGame(arcade.View):
         self.view_bottom = 0
         self.view_left = 0
 
+        self.level = 1
+
         # Keep track of the score
         self.score = 0
         self.lives = 3
 
-    def setup(self):
+    def setup(self, level):
 
         """ Set up the game here. Call this function to restart the game. """
 
@@ -295,6 +344,8 @@ class MyGame(arcade.View):
         self.zombie_list = arcade.SpriteList()
         self.bullet_list = arcade.SpriteList()
         self.coin_list = arcade.SpriteList()
+        self.next_level_list = arcade.SpriteList()
+        self.final_list = arcade.SpriteList()
 
         # Set up the player, specifically placing it at these coordinates.
         # self.player_sprite = arcade.Sprite("hero.png", PLAYER_SCALING)
@@ -313,22 +364,53 @@ class MyGame(arcade.View):
             texture_list.append(texture_pair[1])
         self.player_list.preload_textures(texture_list)
 
-        # Create zombies
-        self.zombie_sprite = ZombieCharacter()
-        self.zombie_sprite.center_x = PLAYER_START_X + 1000
-        self.zombie_sprite.center_y = PLAYER_START_Y + 1
-        self.zombie_sprite.change_x = 2
-        self.zombie_sprite.boundary_right = self.zombie_sprite.center_x + 500
-        self.zombie_sprite.boundary_left = self.zombie_sprite.center_x - 500
-        self.zombie_list.append(self.zombie_sprite)
+        for texture_pair in self.player_sprite.jump_textures:
+            texture_list.append(texture_pair[0])
+            texture_list.append(texture_pair[1])
+        self.player_list.preload_textures(texture_list)
 
-        self.zombie_sprite = ZombieCharacter()
-        self.zombie_sprite.center_x = PLAYER_START_X + 1000
-        self.zombie_sprite.center_y = PLAYER_START_Y + 642
-        self.zombie_sprite.change_x = 2
-        self.zombie_sprite.boundary_right = self.zombie_sprite.center_x + 200
-        self.zombie_sprite.boundary_left = self.zombie_sprite.center_x - 200
-        self.zombie_list.append(self.zombie_sprite)
+        # Create zombies
+        if self.level == 1:
+            self.zombie_sprite = ZombieCharacter()
+            self.zombie_sprite.center_x = PLAYER_START_X + 1000
+            self.zombie_sprite.center_y = PLAYER_START_Y + 1
+            self.zombie_sprite.change_x = 2
+            self.zombie_sprite.boundary_right = self.zombie_sprite.center_x + 500
+            self.zombie_sprite.boundary_left = self.zombie_sprite.center_x - 500
+            self.zombie_list.append(self.zombie_sprite)
+
+            self.zombie_sprite = ZombieCharacter()
+            self.zombie_sprite.center_x = PLAYER_START_X + 1000
+            self.zombie_sprite.center_y = PLAYER_START_Y + 642
+            self.zombie_sprite.change_x = 2
+            self.zombie_sprite.boundary_right = self.zombie_sprite.center_x + 200
+            self.zombie_sprite.boundary_left = self.zombie_sprite.center_x - 200
+            self.zombie_list.append(self.zombie_sprite)
+
+            self.zombie_sprite = ZombieCharacter()
+            self.zombie_sprite.center_x = PLAYER_START_X + 2180
+            self.zombie_sprite.center_y = PLAYER_START_Y + 258
+            self.zombie_sprite.change_x = 2
+            self.zombie_sprite.boundary_right = self.zombie_sprite.center_x + 150
+            self.zombie_sprite.boundary_left = self.zombie_sprite.center_x - 150
+            self.zombie_list.append(self.zombie_sprite)
+
+        if self.level == 2:
+            self.zombie_sprite = ZombieCharacter()
+            self.zombie_sprite.center_x = PLAYER_START_X + 800
+            self.zombie_sprite.center_y = PLAYER_START_Y + 260
+            self.zombie_sprite.change_x = 2
+            self.zombie_sprite.boundary_right = self.zombie_sprite.center_x + 200
+            self.zombie_sprite.boundary_left = self.zombie_sprite.center_x - 200
+            self.zombie_list.append(self.zombie_sprite)
+
+            self.zombie_sprite = ZombieCharacter()
+            self.zombie_sprite.center_x = PLAYER_START_X + 2100
+            self.zombie_sprite.center_y = PLAYER_START_Y + 455
+            self.zombie_sprite.change_x = 2
+            self.zombie_sprite.boundary_right = self.zombie_sprite.center_x + 176
+            self.zombie_sprite.boundary_left = self.zombie_sprite.center_x - 180
+            self.zombie_list.append(self.zombie_sprite)
 
         texture_list = []
         for texture_pair in self.zombie_sprite.walk_textures:
@@ -341,11 +423,14 @@ class MyGame(arcade.View):
         self.zombie_list.preload_textures(texture_list)
 
         # Read the map
-        my_map = arcade.tilemap.read_tmx("map.tmx")
+
+        my_map = arcade.tilemap.read_tmx(f"map1_level_{level}.tmx")
         self.wall_list = arcade.tilemap.process_layer(my_map, 'platforms', TILE_SCALING)
         self.background_list = arcade.tilemap.process_layer(my_map, 'background', TILE_SCALING)
         self.damage_list = arcade.tilemap.process_layer(my_map, 'damage', TILE_SCALING)
         self.coin_list = arcade.tilemap.process_layer(my_map, 'coins', TILE_SCALING)
+        self.next_level_list = arcade.tilemap.process_layer(my_map, 'next_level', TILE_SCALING)
+        self.final_list = arcade.tilemap.process_layer(my_map, 'final', TILE_SCALING)
 
         # Set the background color
         if my_map.background_color:
@@ -369,6 +454,8 @@ class MyGame(arcade.View):
         self.coin_list.draw()
         self.bullet_list.draw()
         self.damage_list.draw()
+        self.next_level_list.draw()
+        self.final_list.draw()
         self.zombie_list.draw()
 
         arcade.set_background_color(arcade.color.GRAY_BLUE)
@@ -378,10 +465,6 @@ class MyGame(arcade.View):
 
         output_2 = f"Lives left: {self.lives}"
         arcade.draw_text(output_2, 10 + self.view_left, 20 + self.view_bottom, arcade.color.WHITE, 30)
-
-        if self.lives == 0:
-            output = "GAME OVER"
-            arcade.draw_text(output, SCREEN_WIDTH / 3, SCREEN_HEIGHT / 2, arcade.color.WHITE, 50)
 
     def on_key_press(self, key, modifiers):
         """Called whenever a key is pressed. """
@@ -504,20 +587,30 @@ class MyGame(arcade.View):
                                 self.view_bottom,
                                 SCREEN_HEIGHT + self.view_bottom)
 
-            if len(arcade.check_for_collision_with_list(self.player_sprite, self.zombie_list)) > 0:
-                self.lives -= 1
-                arcade.play_sound(self.zombie_bite_sound)
-                self.setup()
+        if len(arcade.check_for_collision_with_list(self.player_sprite, self.zombie_list)) > 0:
+            self.lives -= 1
+            arcade.play_sound(self.zombie_bite_sound)
+            self.setup(self.level)
 
-            if len(arcade.check_for_collision_with_list(self.player_sprite, self.damage_list)) > 0:
-                self.lives -= 1
-                arcade.play_sound(self.zombie_bite_sound)
-                self.setup()
+        if len(arcade.check_for_collision_with_list(self.player_sprite, self.damage_list)) > 0:
+            self.lives -= 1
+            arcade.play_sound(self.zombie_bite_sound)
+            self.setup(self.level)
 
         if self.lives == 0:
             self.game_over = True
             arcade.play_sound(self.game_over_sound)
 
+        if len(arcade.check_for_collision_with_list(self.player_sprite, self.next_level_list)) > 0:
+            self.level += 1
+            self.setup(self.level)
+
+        if len(arcade.check_for_collision_with_list(self.player_sprite, self.final_list)) > 0:
+            self.lives = 0
+
+        if self.lives == 0:
+            view = GameOverView()
+            self.window.show_view(view)
 
 def main():
     """ Main method """

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<tileset version="1.4" tiledversion="1.4.2" name="my_tiles" tilewidth="128" tileheight="128" tilecount="48" columns="0">
+<tileset version="1.4" tiledversion="1.4.2" name="my_tiles" tilewidth="128" tileheight="128" tilecount="66" columns="0">
  <grid orientation="orthogonal" width="1" height="1"/>
  <tile id="0">
   <image width="128" height="128" source="wall128x128.png"/>
@@ -144,5 +144,59 @@
  </tile>
  <tile id="76">
   <image width="128" height="128" source="tiles/PNG/Items/coinGold.png"/>
+ </tile>
+ <tile id="77">
+  <image width="128" height="128" source="tiles/PNG/Ground/Dirt/dirt.png"/>
+ </tile>
+ <tile id="78">
+  <image width="128" height="128" source="tiles/PNG/Ground/Dirt/dirtCenter.png"/>
+ </tile>
+ <tile id="79">
+  <image width="128" height="128" source="tiles/PNG/Ground/Dirt/dirtCenter_rounded.png"/>
+ </tile>
+ <tile id="80">
+  <image width="128" height="128" source="tiles/PNG/Ground/Dirt/dirtCliff_left.png"/>
+ </tile>
+ <tile id="81">
+  <image width="128" height="128" source="tiles/PNG/Ground/Dirt/dirtCliff_right.png"/>
+ </tile>
+ <tile id="82">
+  <image width="128" height="128" source="tiles/PNG/Ground/Dirt/dirtCliffAlt_left.png"/>
+ </tile>
+ <tile id="83">
+  <image width="128" height="128" source="tiles/PNG/Ground/Dirt/dirtCliffAlt_right.png"/>
+ </tile>
+ <tile id="84">
+  <image width="128" height="128" source="tiles/PNG/Ground/Dirt/dirtCorner_left.png"/>
+ </tile>
+ <tile id="85">
+  <image width="128" height="128" source="tiles/PNG/Ground/Dirt/dirtCorner_right.png"/>
+ </tile>
+ <tile id="86">
+  <image width="128" height="128" source="tiles/PNG/Ground/Dirt/dirtHalf.png"/>
+ </tile>
+ <tile id="87">
+  <image width="128" height="128" source="tiles/PNG/Ground/Dirt/dirtHalf_left.png"/>
+ </tile>
+ <tile id="88">
+  <image width="128" height="128" source="tiles/PNG/Ground/Dirt/dirtHalf_mid.png"/>
+ </tile>
+ <tile id="89">
+  <image width="128" height="128" source="tiles/PNG/Ground/Dirt/dirtHalf_right.png"/>
+ </tile>
+ <tile id="90">
+  <image width="128" height="128" source="tiles/PNG/Ground/Dirt/dirtHill_left.png"/>
+ </tile>
+ <tile id="91">
+  <image width="128" height="128" source="tiles/PNG/Ground/Dirt/dirtHill_right.png"/>
+ </tile>
+ <tile id="92">
+  <image width="128" height="128" source="tiles/PNG/Ground/Dirt/dirtLeft.png"/>
+ </tile>
+ <tile id="93">
+  <image width="128" height="128" source="tiles/PNG/Ground/Dirt/dirtMid.png"/>
+ </tile>
+ <tile id="94">
+  <image width="128" height="128" source="tiles/PNG/Ground/Dirt/dirtRight.png"/>
  </tile>
 </tileset>
