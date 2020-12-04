@@ -599,7 +599,6 @@ class MyGame(arcade.View):
 
         if self.lives == 0:
             self.game_over = True
-            arcade.play_sound(self.game_over_sound)
 
         if len(arcade.check_for_collision_with_list(self.player_sprite, self.next_level_list)) > 0:
             self.level += 1
@@ -611,6 +610,7 @@ class MyGame(arcade.View):
         if self.lives == 0:
             view = GameOverView()
             self.window.show_view(view)
+
 
 def main():
     """ Main method """
